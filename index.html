@@ -3,11 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./css/checkbox.css">
+    <link rel="stylesheet" type="text/css" href="./css/button.css">
+    <link rel="stylesheet" type="text/css" href="./css/table.css">
+    <!-- Font Awesome Icon Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Libitum test</title>
 </head>
 <body>
-    <h1>Libitum test</h1>
-    <div id="root"></div>
+    <div id="application-container">
+        <h1>Libitum test</h1>
+
+        <div id="checkbox-container">
+
+            <label class="container">Awesome bicycle
+                <input type="checkbox" checked="checked">
+                <span class="checkmark"></span>
+            </label>
+            
+            <label class="container">Extended warranty
+                <input type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+            
+            <label class="container">Gratis 3 months
+                <input type="checkbox" disabled>
+                <span class="checkmark"></span>
+            </label>
+
+        </div>
+
+        <div id="history-container">
+            <div id="button-container">
+                <button class="btn success">Save</button>
+                <button class="btn warning">Clear unsaved history</button>
+                <button class="btn danger">Delete whole history</button>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Date and time</th>
+                    <th>Awesome bicycle</th>
+                    <th>Extended warranty</th>
+                    <th>Gratis 3 months</th>
+                </tr>
+                <tr class="unsaved">
+                    <td>2020. may 13th 13:11</td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-remove"></i></td>
+                    <td><i class="fa fa-remove"></i></td>
+                </tr>
+                <tr class="unsaved">
+                    <td>2020. may 13th 13:09</td>
+                    <td><i class="fa fa-remove"></i></td>
+                    <td><i class="fa fa-remove"></i></td>
+                    <td><i class="fa fa-remove"></i></td>
+                </tr>
+                <tr class="saved">
+                    <td>2020. may 13th 13:07</td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
+                </tr>
+                <tr class="saved">
+                    <td>2020. may 13th 12:59</td>
+                    <td><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-remove"></i></td>
+                    <td><i class="fa fa-remove"></i></td>
+                </tr>
+                <tr class="saved">
+                    <td>2020. may 13th 12:57</td>
+                    <td><i class="fa fa-remove"></i></td>
+                    <td><i class="fa fa-remove"></i></td>
+                    <td><i class="fa fa-remove"></i></td>
+                </tr>
+              </table>
+              
+        </div>
+
+    </div>
+
+
     
     <!-- Load React. -->        
     <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
