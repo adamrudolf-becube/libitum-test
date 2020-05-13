@@ -143,6 +143,8 @@ class App extends React.Component {
 
     clrearUnsavedHistory() {
         this.setState({
+            bicycleIsSelected: false,
+            warrantyIsSelected: false,
             unSavedHistory: []
         });
     }
