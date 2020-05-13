@@ -112,21 +112,35 @@ class App extends React.Component {
         this.handleWarrantyStateChange = this.handleWarrantyStateChange.bind(this);
     }
 
+    appendStateToHistory() {
+        const currentDate = new Date();
+        const currentDateString = currentDate.toISOString();
+        this.setState((state) => ({
+            unSavedHistory: [{
+                "dateTime": currentDateString,
+                "bicycleIsSelected": state.bicycleIsSelected,
+                "warrantyIsSelected": state.warrantyIsSelected,
+            }].concat(state.unSavedHistory)
+        }));
+    }
+
     handleBicycleStateChange() {
         if (this.state.bicycleIsSelected) {
-            this.setState((state) => ({
+            this.setState({
                 bicycleIsSelected: false,
                 warrantyIsSelected: false
-            }));
+            });
         } else {
-            this.setState((state) => ({
+            this.setState({
                 bicycleIsSelected: true
-            }));
+            });
         }
+        this.appendStateToHistory();
     }
 
     handleWarrantyStateChange() {
         this.setState((state) => ({warrantyIsSelected: !state.warrantyIsSelected}));
+        this.appendStateToHistory();
     }
 
     render() {
