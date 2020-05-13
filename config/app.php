@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Libitum Test'),
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ return [
     |
     */
 
-    'key' => env('UZVld80BzhaLNiiKtOBusluAm9LGY3dv'),
+    'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
 
