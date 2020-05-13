@@ -1,3 +1,36 @@
+// Fake data to temporary mimic API responses
+var unSavedHistory = [
+    {
+        "dateTime": "2020-05-13 14:54",
+        "bicycleIsSelected": true,
+        "warrantyIsSelected": false,
+    },
+    {
+        "dateTime": "2020-05-13 14:52",
+        "bicycleIsSelected": false,
+        "warrantyIsSelected": false,
+    },
+]
+
+// Fake data to temporary mimic API responses
+var savedHistory = [
+    {
+        "dateTime": "2020-05-13 13:15",
+        "bicycleIsSelected": true,
+        "warrantyIsSelected": true,
+    },
+    {
+        "dateTime": "2020-05-13 13:12",
+        "bicycleIsSelected": true,
+        "warrantyIsSelected": false,
+    },
+    {
+        "dateTime": "2020-05-13 11:50",
+        "bicycleIsSelected": false,
+        "warrantyIsSelected": false,
+    },
+]
+
 function ProductBox(props) {
     return (
         <label className="container">{props.name}
@@ -45,41 +78,35 @@ function HistoryTable(props) {
     );
 }
 
+function TableIcon(props) {
+    return props.checked ? <i className="fa fa-check"></i> : <i className="fa fa-remove"></i>;
+}
+
 function HistoryContainer(props) {
+
+    const unsavedTableRows = unSavedHistory.map((element) =>
+        <tr key={element["dateTime"]} className="unsaved">
+            <td>{element["dateTime"]}</td>
+            <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
+            <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+            <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+        </tr>
+    );
+
+    const savedTableRows = savedHistory.map((element) =>
+    <tr key={element["dateTime"]} className="saved">
+        <td>{element["dateTime"]}</td>
+        <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
+        <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+        <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+    </tr>
+);
     return (
         <div id="history-container">
             <ButtonContainer />
             <HistoryTable>
-                <tr class="unsaved">
-                    <td>2020. may 13th 13:11</td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-remove"></i></td>
-                    <td><i class="fa fa-remove"></i></td>
-                </tr>
-                <tr class="unsaved">
-                    <td>2020. may 13th 13:09</td>
-                    <td><i class="fa fa-remove"></i></td>
-                    <td><i class="fa fa-remove"></i></td>
-                    <td><i class="fa fa-remove"></i></td>
-                </tr>
-                <tr class="saved">
-                    <td>2020. may 13th 13:07</td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-check"></i></td>
-                </tr>
-                <tr class="saved">
-                    <td>2020. may 13th 12:59</td>
-                    <td><i class="fa fa-check"></i></td>
-                    <td><i class="fa fa-remove"></i></td>
-                    <td><i class="fa fa-remove"></i></td>
-                </tr>
-                <tr class="saved">
-                    <td>2020. may 13th 12:57</td>
-                    <td><i class="fa fa-remove"></i></td>
-                    <td><i class="fa fa-remove"></i></td>
-                    <td><i class="fa fa-remove"></i></td>
-                </tr>
+                {unsavedTableRows}
+                {savedTableRows}
             </HistoryTable>
         </div>
     )
