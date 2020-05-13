@@ -6,7 +6,7 @@ Class DatabaseConnectionFacroty {
 
     var $connection;
     
-	function createConnection() {
+	function create_connection() {
         $connection = mysqli_connect($SERVER_NAME, $USER_NAME, $PASSWORD, $DB_NAME);
         
         if ($connection->connect_error) {
