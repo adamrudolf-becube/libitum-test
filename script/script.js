@@ -94,13 +94,14 @@ function HistoryContainer(props) {
     );
 
     const savedTableRows = savedHistory.map((element) =>
-    <tr key={element["dateTime"]} className="saved">
-        <td>{element["dateTime"]}</td>
-        <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
-        <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
-        <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
-    </tr>
-);
+        <tr key={element["dateTime"]} className="saved">
+            <td>{element["dateTime"]}</td>
+            <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
+            <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+            <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+        </tr>
+    );
+    
     return (
         <div id="history-container">
             <ButtonContainer />
