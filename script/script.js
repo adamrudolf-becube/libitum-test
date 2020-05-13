@@ -37,16 +37,6 @@ class ProductBox extends React.Component {
     }
 }
 
-function ButtonContainer(props) {
-    return (
-        <div id="button-container">
-            <button className="btn success">Save</button>
-            <button className="btn warning">Clear unsaved history</button>
-            <button className="btn danger">Delete whole history</button>
-        </div>
-    );
-}
-
 function HistoryTable(props) {
     return (
         <table>
@@ -69,35 +59,61 @@ function TableIcon(props) {
     return props.checked ? <i className="fa fa-check"></i> : <i className="fa fa-remove"></i>;
 }
 
-function HistoryContainer(props) {
+class HistoryContainer extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
+        this.onClearUnsavedHistoryButtonClick = this.onClearUnsavedHistoryButtonClick.bind(this);
+        this.onDeleteFullHistoryButtonClick = this.onDeleteFullHistoryButtonClick.bind(this);
+    }
 
-    const unsavedTableRows = props.unSavedHistory.map((element) =>
-        <tr key={element["dateTime"]} className="unsaved">
-            <td>{element["dateTime"]}</td>
-            <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
-            <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
-            <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
-        </tr>
-    );
+    onSaveButtonClick(e) {
 
-    const savedTableRows = savedHistory.map((element) =>
-        <tr key={element["dateTime"]} className="saved">
-            <td>{element["dateTime"]}</td>
-            <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
-            <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
-            <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
-        </tr>
-    );
+    }
 
-    return (
-        <div id="history-container">
-            <ButtonContainer />
-            <HistoryTable>
-                {unsavedTableRows}
-                {savedTableRows}
-            </HistoryTable>
-        </div>
-    )
+    onClearUnsavedHistoryButtonClick(e) {
+        this.props.onClearUnsavedHistory();
+    }
+
+    onDeleteFullHistoryButtonClick(e) {
+        
+    }
+
+    render() {
+
+        const unsavedTableRows = this.props.unSavedHistory.map((element) =>
+            <tr key={element["dateTime"]} className="unsaved">
+                <td>{element["dateTime"]}</td>
+                <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
+                <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+                <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+            </tr>
+        );
+
+        const savedTableRows = savedHistory.map((element) =>
+            <tr key={element["dateTime"]} className="saved">
+                <td>{element["dateTime"]}</td>
+                <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
+                <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+                <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+            </tr>
+        );
+
+        return (
+            <div id="history-container">
+                <div id="button-container">
+                    <button className="btn success">Save</button>
+                    <button className="btn warning" onClick={this.onClearUnsavedHistoryButtonClick}>Clear unsaved history</button>
+                    <button className="btn danger">Delete whole history</button>
+                </div>
+                <HistoryTable>
+                    {unsavedTableRows}
+                    {savedTableRows}
+                </HistoryTable>
+            </div>
+        )
+    }
 }
 
 class App extends React.Component {
@@ -110,6 +126,7 @@ class App extends React.Component {
         }
         this.handleBicycleStateChange = this.handleBicycleStateChange.bind(this);
         this.handleWarrantyStateChange = this.handleWarrantyStateChange.bind(this);
+        this.clrearUnsavedHistory = this.clrearUnsavedHistory.bind(this);
     }
 
     appendStateToHistory() {
@@ -122,6 +139,12 @@ class App extends React.Component {
                 "warrantyIsSelected": state.warrantyIsSelected,
             }].concat(state.unSavedHistory)
         }));
+    }
+
+    clrearUnsavedHistory() {
+        this.setState({
+            unSavedHistory: []
+        });
     }
 
     handleBicycleStateChange() {
@@ -149,23 +172,26 @@ class App extends React.Component {
                 <h1>Libitum test</h1>
                 <div id="checkbox-container">
                     <ProductBox
-                     name="Awesome bicycle"
-                     onChange={this.handleBicycleStateChange}
-                     checked={this.state.bicycleIsSelected}
+                        name="Awesome bicycle"
+                        onChange={this.handleBicycleStateChange}
+                        checked={this.state.bicycleIsSelected}
                     />
                     <ProductBox 
-                     name="Extended warranty" 
-                     onChange={this.handleWarrantyStateChange} 
-                     checked={this.state.warrantyIsSelected} 
-                     disabled={!this.state.bicycleIsSelected} 
+                        name="Extended warranty" 
+                        onChange={this.handleWarrantyStateChange} 
+                        checked={this.state.warrantyIsSelected} 
+                        disabled={!this.state.bicycleIsSelected} 
                     />
                     <ProductBox
-                     name="Gratis 3 months" 
-                     checked={this.state.warrantyIsSelected} 
-                     disabled 
+                        name="Gratis 3 months" 
+                        checked={this.state.warrantyIsSelected} 
+                        disabled 
                     />
                 </div>
-                <HistoryContainer unSavedHistory={this.state.unSavedHistory} />
+                <HistoryContainer
+                    unSavedHistory={this.state.unSavedHistory}
+                    onClearUnsavedHistory={this.clrearUnsavedHistory} 
+                />
             </div>
         );
     }
