@@ -17,23 +17,24 @@ var savedHistory = [
     },
 ]
 
-function ProductBox(props) {
-    return (
-        <label className="container">{props.name}
-            <input type="checkbox" checked={props.checked} disabled={props.disabled} />
-            <span className="checkmark"></span>
-        </label>
-    );
-}
+class ProductBox extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
+    
+    handleChange(e) {
+        this.props.onChange();
+    }
 
-function ProductBoxContainer(props) {
-    return (
-        <div id="checkbox-container">
-            <ProductBox name="Awesome bicycle" />
-            <ProductBox name="Extended warranty"  />
-            <ProductBox name="Gratis 3 months" disabled />
-        </div>
-    );
+    render() {
+        return (
+            <label className="container">{this.props.name}
+                <input type="checkbox" onChange={this.handleChange} checked={this.props.checked} disabled={this.props.disabled} />
+                <span className="checkmark"></span>
+            </label>
+        );
+    }
 }
 
 function ButtonContainer(props) {
@@ -102,14 +103,54 @@ function HistoryContainer(props) {
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {unSavedHistory: []}
+        this.state = {
+            bicycleIsSelected: false,
+            warrantyIsSelected: false,
+            unSavedHistory: []
+        }
+        this.handleBicycleStateChange = this.handleBicycleStateChange.bind(this);
+        this.handleWarrantyStateChange = this.handleWarrantyStateChange.bind(this);
+    }
+
+    handleBicycleStateChange() {
+        if (this.state.bicycleIsSelected) {
+            this.setState((state) => ({
+                bicycleIsSelected: false,
+                warrantyIsSelected: false
+            }));
+        } else {
+            this.setState((state) => ({
+                bicycleIsSelected: true
+            }));
+        }
+    }
+
+    handleWarrantyStateChange() {
+        this.setState((state) => ({warrantyIsSelected: !state.warrantyIsSelected}));
     }
 
     render() {
         return (
             <div id="app">
                 <h1>Libitum test</h1>
-                <ProductBoxContainer />
+                <div id="checkbox-container">
+                    <ProductBox
+                     name="Awesome bicycle"
+                     onChange={this.handleBicycleStateChange}
+                     checked={this.state.bicycleIsSelected}
+                    />
+                    <ProductBox 
+                     name="Extended warranty" 
+                     onChange={this.handleWarrantyStateChange} 
+                     checked={this.state.warrantyIsSelected} 
+                     disabled={!this.state.bicycleIsSelected} 
+                    />
+                    <ProductBox
+                     name="Gratis 3 months" 
+                     checked={this.state.warrantyIsSelected} 
+                     disabled 
+                    />
+                </div>
                 <HistoryContainer unSavedHistory={this.state.unSavedHistory} />
             </div>
         );
