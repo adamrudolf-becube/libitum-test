@@ -9,10 +9,13 @@ function ProductBox(props) {
 
 function App(props) {
     return (
-        <div id="checkbox-container">
-            <ProductBox name="Awesome bicycle" />
-            <ProductBox name="Extended warranty"  />
-            <ProductBox name="Gratis 3 months" disabled />
+        <div id="app">
+            <h1>Libitum test</h1>
+            <div id="checkbox-container">
+                <ProductBox name="Awesome bicycle" />
+                <ProductBox name="Extended warranty"  />
+                <ProductBox name="Gratis 3 months" disabled />
+            </div>
         </div>
     );
 }
