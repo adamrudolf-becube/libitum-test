@@ -29,7 +29,7 @@ class ProductBox extends React.Component {
 
     render() {
         return (
-            <label className="container">{this.props.name}
+            <label className={this.props.disabled ? "disabled container" : "container"}>{this.props.name}
                 <input type="checkbox" onChange={this.handleChange} checked={this.props.checked} disabled={this.props.disabled} />
                 <span className="checkmark"></span>
             </label>
