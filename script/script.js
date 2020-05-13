@@ -1,18 +1,4 @@
 // Fake data to temporary mimic API responses
-var unSavedHistory = [
-    {
-        "dateTime": "2020-05-13 14:54",
-        "bicycleIsSelected": true,
-        "warrantyIsSelected": false,
-    },
-    {
-        "dateTime": "2020-05-13 14:52",
-        "bicycleIsSelected": false,
-        "warrantyIsSelected": false,
-    },
-]
-
-// Fake data to temporary mimic API responses
 var savedHistory = [
     {
         "dateTime": "2020-05-13 13:15",
@@ -84,7 +70,7 @@ function TableIcon(props) {
 
 function HistoryContainer(props) {
 
-    const unsavedTableRows = unSavedHistory.map((element) =>
+    const unsavedTableRows = props.unSavedHistory.map((element) =>
         <tr key={element["dateTime"]} className="unsaved">
             <td>{element["dateTime"]}</td>
             <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
@@ -101,7 +87,7 @@ function HistoryContainer(props) {
             <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
         </tr>
     );
-    
+
     return (
         <div id="history-container">
             <ButtonContainer />
@@ -113,14 +99,21 @@ function HistoryContainer(props) {
     )
 }
 
-function App(props) {
-    return (
-        <div id="app">
-            <h1>Libitum test</h1>
-            <ProductBoxContainer />
-            <HistoryContainer />
-        </div>
-    );
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {unSavedHistory: []}
+    }
+
+    render() {
+        return (
+            <div id="app">
+                <h1>Libitum test</h1>
+                <ProductBoxContainer />
+                <HistoryContainer unSavedHistory={this.state.unSavedHistory} />
+            </div>
+        );
+    }
 }
   
   ReactDOM.render(
