@@ -1,21 +1,3 @@
-// Fake data to temporary mimic API responses
-var savedHistory = [
-    {
-        "dateTime": "2020-05-13 13:15",
-        "bicycleIsSelected": true,
-        "warrantyIsSelected": true,
-    },
-    {
-        "dateTime": "2020-05-13 13:12",
-        "bicycleIsSelected": true,
-        "warrantyIsSelected": false,
-    },
-    {
-        "dateTime": "2020-05-13 11:50",
-        "bicycleIsSelected": false,
-        "warrantyIsSelected": false,
-    },
-]
 
 class ProductBox extends React.Component {
     constructor(props) {
@@ -91,14 +73,15 @@ class HistoryContainer extends React.Component {
             </tr>
         );
 
-        const savedTableRows = savedHistory.map((element) =>
-            <tr key={element["dateTime"]} className="saved">
-                <td>{element["dateTime"]}</td>
-                <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
-                <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
-                <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
+        var savedTableRows = this.props.savedHistory.map((element) =>
+            <tr key={element["ID"]} className="saved">
+                <td>{element["datetime"]}</td>
+                <td><TableIcon checked={parseInt(element["bicycleSelected"])} /></td>
+                <td><TableIcon checked={parseInt(element["warrantySelected"])} /></td>
+                <td><TableIcon checked={parseInt(element["warrantySelected"])} /></td>
             </tr>
         );
+        savedTableRows.reverse();
 
         return (
             <div id="history-container">
@@ -122,8 +105,10 @@ class App extends React.Component {
         this.state = {
             bicycleIsSelected: false,
             warrantyIsSelected: false,
-            unSavedHistory: []
+            unSavedHistory: [],
+            savedHistory: []
         }
+        this.updateSavedHistory();
         this.handleBicycleStateChange = this.handleBicycleStateChange.bind(this);
         this.handleWarrantyStateChange = this.handleWarrantyStateChange.bind(this);
         this.clearUnsavedHistory = this.clearUnsavedHistory.bind(this);
@@ -189,6 +174,24 @@ class App extends React.Component {
     }
     
     updateSavedHistory() {
+
+        var self = this;
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var responseJson = JSON.parse(this.responseText);
+                self.setState({
+                    savedHistory: responseJson
+                });
+            }
+        }
+
+        xhttp.open("GET", "api/history.php", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.setRequestHeader("Accept", "application/json");
+        xhttp.send();
     }
 
     render() {
@@ -215,6 +218,7 @@ class App extends React.Component {
                 </div>
                 <HistoryContainer
                     unSavedHistory={this.state.unSavedHistory}
+                    savedHistory={this.state.savedHistory}
                     onSaveButtonClick={this.onSaveButtonClick}
                     onClearUnsavedHistory={this.clearUnsavedHistory} 
                 />
