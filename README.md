@@ -2,6 +2,14 @@
 
 This project is part of my interview process at [Libitum](https://libitum.com/). The task was to create a whole, but very simple webapplication, both backend and frontend. Since I applied to a backend position, and also my profile fits it more, I mostly concentrated on the backend part, and functional part and not so much on design.
 
+## How to install
+
+1. Clone or download this repository.
+2. Create a database with a user who has read and write access to it. I used MySQL with phpMyAdmin interface as a part of XAMPP bundle.
+3. In the database create a table named `selectionhistory`. (The table name is hard coded in `history.php`.) To do this, just import `selectionhistory.sql` or run the SQL in it. You can also see the details of my system in this file. (And yes, sorry the auto generated comments are in Hungarian.)
+4. Copy `config-example.php` to `config.php` and change the values of the constants to fit your database setup.
+5. Start a PHP server and have fun.
+
 ## Requirements I got
 
 > You will build a website that presents three "products" (boxes) of which one is selectable from the start.
@@ -30,8 +38,15 @@ For backend I used what I already had: XAMPP for Windows 7.2.12 (PHP 7.2.12), wi
 
 I used React for frontend rendering. I need to mention 2 things:
 
-* I knew what React was and what the main concepts were, but otherwise I learned what I used for this project, while doing it, building this project practically from React tutorial. Please consider the React parts accordingly. My emphasis was on the backend.
+* I knew what React was and what the main concepts were, but otherwise I learned what I used for this project, while doing it, building this project practically from React tutorial. Please consider the React parts accordingly.
 * This React code is not optimised, it is built in a way to be the least complex to create and not the most optimal to be run. I am aware of that. (In this little project it doesn't really matter anyway.)
+
+### Backend solutions
+
+* I have not used any backend frameworks to implement the server side of the REST API. At one point I started to install Laravel but after a short consideration I decided that for this size of a project it would be a complex task to set it up from zero.
+* I used object oriented mysqli to connect to the database. I wrapped it to my own class to open connection during construction and close it on desctruction so automatic garbage collection takes care of it so it reduces coupling.
+* The login data to the database is stored in `config.php` in the root folder of this project. This file is ignored in `.gitignore`. It is to not store credentials in the Git repo. To see the structure see `config-example.php`. You should copy this file, rename it to `config.php` and fill it accordingly.
+* There is one API endpoint, and the operation depends on the HTTP method type. Note that there are only API calls for bulk operations (e.g. you cannot delete one entry, only all of them). This is for simplicity, but in real life a more complex and secure API would be created.
 
 ## Conceptual solutions
 
@@ -55,10 +70,33 @@ I prefer the **Simplified** solution over the **Naive**, mostly because this ref
 
 Both database and JavaScript will use this data representation.
 
+### Additional logic
+
+I implemented some logic which was not among the requirements. I did this 1) because I found them quite simple and 2) to help myself to test my solutions. Normally my principle is not to do anything which is not required to reduce complexity, risks and development time. Consider this an exceptional case.
+
+These features are the following:
+
+* There is the table which shows the history. Different backgounds show the saved history (which is in the database) and the changes since the last save (unsaved history).
+- Checkbox states
+    - Every checkbox change is appended to unsaved history and immediately displayed on the
+      history table.
+    - If the application is started and database is empty, all checkboxes start unselected
+      and table is empty.
+    - If the application is started and database is not empty, checkboxes are set to the last 
+      saved state and table shows the saved history.
+ 
+- User actions
+    - User can save the unsaved history to the database. Unsaved history gets empty and what
+      was earlier in unsaved history, gets to the saved history (indirectly, through the database).
+      Checkboxes are set to the last saved sate (no change in this case).
+    - User can delete the unsaved history and return to the last saved state.
+    - User can delete all (saved and unsaved) history. In this case the saved and unsaved history
+      gets empty, database gets cleared and all checkboxes become unchecked.
+ 
+
 ### Disclaimer on performance
 
 This application is not optimized for performance. This is for two reasons: first of all, this is not a production environment and is exremely small anyway, I don't expect any performance issues. Secondly, since this is for demonstration purposes I preferred clean, structured design to performance. Collecting all CSS to one file, minifying CSS and JS, and render React server side would be some of the examples I would have done differently in a bigger and real project.
-
 
 ## Design
 
@@ -67,3 +105,7 @@ Since fronted is not really my field, I decided either to use default html or so
 * I used the checkbox design from [here](https://www.w3schools.com/howto/howto_css_custom_checkbox.asp)
 * I used the button design from [here](https://www.w3schools.com/howto/howto_css_alert_buttons.asp)
 * Table design is a mixture from [here](https://www.w3schools.com/howto/howto_css_comparison_table.asp), [here](https://www.w3schools.com/css/css_table.asp) and some own modifications to separate saved and unsaved history.
+
+## Contact
+
+If you have questions and comments, contact me on `rudolf.adam.a@gmail.com` or on my [LinkedIn](https://www.linkedin.com/in/%C3%A1d%C3%A1m-rudolf-21795096/).
