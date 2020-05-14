@@ -326,10 +326,9 @@ class App extends React.Component {
 
     clearUnsavedHistory() {
         this.setState({
-            bicycleIsSelected: false,
-            warrantyIsSelected: false,
             unSavedHistory: []
         });
+        this.setCheckboxesToLastSavedState();
     }
 
     updateSavedHistory() {
@@ -340,10 +339,12 @@ class App extends React.Component {
 
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                var responseJson = JSON.parse(this.responseText);
+                const responseJson = JSON.parse(this.responseText);
+              
                 self.setState({
-                    savedHistory: responseJson
+                    savedHistory: responseJson,
                 });
+                self.setCheckboxesToLastSavedState();
             }
         }
 
@@ -351,6 +352,23 @@ class App extends React.Component {
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.setRequestHeader("Accept", "application/json");
         xhttp.send();
+    }
+
+    setCheckboxesToLastSavedState() {
+        const latestElement = this.state.savedHistory[this.state.savedHistory.length - 1];
+
+        var bicycleSelected = false;
+        var warrantySelected = false;
+
+        if (latestElement) {
+            bicycleSelected = parseInt(latestElement["bicycleSelected"]);
+            warrantySelected = parseInt(latestElement["warrantySelected"]);
+
+            this.setState({
+                bicycleIsSelected: bicycleSelected,
+                warrantyIsSelected: warrantySelected,
+            });
+        }
     }
 
     render() {
