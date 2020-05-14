@@ -1,4 +1,8 @@
 
+function ISOStringToReadable(ISOString) {
+    return ISOString.substring(0,19).replace("T", " ")
+}
+
 class ProductBox extends React.Component {
     constructor(props) {
         super(props);
@@ -66,7 +70,7 @@ class HistoryContainer extends React.Component {
 
         const unsavedTableRows = this.props.unSavedHistory.map((element) =>
             <tr key={element["dateTime"]} className="unsaved">
-                <td>{element["dateTime"]}</td>
+                <td>{ISOStringToReadable(element["dateTime"])}</td>
                 <td><TableIcon checked={element["bicycleIsSelected"]} /></td>
                 <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
                 <td><TableIcon checked={element["warrantyIsSelected"]} /></td>
