@@ -67,11 +67,16 @@ Class DatabaseConnection {
      * return a mysqli_result object. For other successful
      * queries mysqli_query() will return TRUE.
      */
-    function query ( string $query ) {
+    public function query ( string $query ) {
         return $this->mysqli->query($query);
     }
 
-    function get_error() {
+    /**
+     * Returns the last error message for the most recent MySQLi function call that can succeed or fail.
+     * 
+     * @return A string that describes the error. An empty string if no error occurred.
+     */
+    public function get_error() {
         return $this->mysqli->error;
     }
 }
