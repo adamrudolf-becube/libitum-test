@@ -1,8 +1,8 @@
 <?php
 
-$SERVER_NAME = "localhost";
-$USER_NAME = "";
-$PASSWORD = "";
-$DB_NAME = "libitum-test";
+define("SERVER_NAME", "localhost");
+define("USER_NAME", "");
+define("PASSWORD", "");
+define("DB_NAME", "libitum_test");
 
 ?>
