@@ -14,6 +14,13 @@ function ISOStringToReadable(ISOString) {
  * ProductBox represents a selectable product.
  * 
  * Product box has a fancy clickable checkbox and a label.
+ * 
+ * @param {string} name is displayed as a product name next to the checkbox.
+ * @param {function} onChange callback to be called when "checked" state changes.
+ * @param {bool} checked product is selected if true and unselected if false
+ * @param {bool} disabled user cannot change the state (i.e. product is unselectable) if true.
+ *      A css class "disabled" is also added when true. Product is selectable and css class
+ *      "disabled" is not present if false.
  */
 class ProductBox extends React.Component {
     constructor(props) {
