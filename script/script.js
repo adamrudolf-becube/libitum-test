@@ -69,7 +69,7 @@ class HistoryContainer extends React.Component {
     }
 
     onSaveButtonClick(e) {
-
+        this.props.onSaveButtonClick();
     }
 
     onClearUnsavedHistoryButtonClick(e) {
@@ -103,7 +103,7 @@ class HistoryContainer extends React.Component {
         return (
             <div id="history-container">
                 <div id="button-container">
-                    <button className="btn success">Save</button>
+                    <button className="btn success" onClick={this.onSaveButtonClick}>Save</button>
                     <button className="btn warning" onClick={this.onClearUnsavedHistoryButtonClick}>Clear unsaved history</button>
                     <button className="btn danger">Delete whole history</button>
                 </div>
@@ -126,7 +126,8 @@ class App extends React.Component {
         }
         this.handleBicycleStateChange = this.handleBicycleStateChange.bind(this);
         this.handleWarrantyStateChange = this.handleWarrantyStateChange.bind(this);
-        this.clrearUnsavedHistory = this.clrearUnsavedHistory.bind(this);
+        this.clearUnsavedHistory = this.clearUnsavedHistory.bind(this);
+        this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     }
 
     appendStateToHistory() {
@@ -141,7 +142,7 @@ class App extends React.Component {
         }));
     }
 
-    clrearUnsavedHistory() {
+    clearUnsavedHistory() {
         this.setState({
             bicycleIsSelected: false,
             warrantyIsSelected: false,
@@ -168,6 +169,28 @@ class App extends React.Component {
         this.appendStateToHistory();
     }
 
+    onSaveButtonClick() {
+
+        var self = this;
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                self.clearUnsavedHistory();
+                self.updateSavedHistory();
+            }
+        }
+
+        xhttp.open("POST", "api/history.php", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.setRequestHeader("Accept", "application/json");
+        xhttp.send(JSON.stringify(this.state.unSavedHistory));
+    }
+    
+    updateSavedHistory() {
+    }
+
     render() {
         return (
             <div id="app">
@@ -192,14 +215,15 @@ class App extends React.Component {
                 </div>
                 <HistoryContainer
                     unSavedHistory={this.state.unSavedHistory}
-                    onClearUnsavedHistory={this.clrearUnsavedHistory} 
+                    onSaveButtonClick={this.onSaveButtonClick}
+                    onClearUnsavedHistory={this.clearUnsavedHistory} 
                 />
             </div>
         );
     }
 }
   
-  ReactDOM.render(
+ReactDOM.render(
     <App />,
     document.getElementById('root')
-  );
+);

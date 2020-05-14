@@ -44,7 +44,7 @@ Class DatabaseConnection {
         $this->mysqli = new mysqli($this->server_name, $this->user_name, $this->password, $this->db_name);
  
 		if (mysqli_connect_errno()) {
-			printf("Connect failed: %s\n", mysqli_connect_error());
+			error_log("Connect failed: %s\n", mysqli_connect_error());
 			exit();
         }
     }
@@ -67,8 +67,12 @@ Class DatabaseConnection {
      * return a mysqli_result object. For other successful
      * queries mysqli_query() will return TRUE.
      */
-    function query ( string $query ) : mixed {
+    function query ( string $query ) {
         return $this->mysqli->query($query);
+    }
+
+    function get_error() {
+        return $this->mysqli->error;
     }
 }
 
