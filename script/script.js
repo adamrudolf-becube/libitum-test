@@ -239,34 +239,42 @@ class App extends React.Component {
             savedHistory: []
         }
         this.updateSavedHistory();
+
+        this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
+        this.onClearUnsavedHistoryButtonClick = this.onClearUnsavedHistoryButtonClick.bind(this);
+        this.onDeleteSavedHistoryButtonClick = this.onDeleteSavedHistoryButtonClick.bind(this);
+
         this.handleBicycleStateChange = this.handleBicycleStateChange.bind(this);
         this.handleWarrantyStateChange = this.handleWarrantyStateChange.bind(this);
-        this.clearUnsavedHistory = this.clearUnsavedHistory.bind(this);
-        this.deleteSavedHistory = this.deleteSavedHistory.bind(this);
-        this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     }
 
-    appendStateToHistory() {
-        const currentDate = new Date();
-        const currentDateString = currentDate.toISOString();
-        this.setState((state) => ({
-            unSavedHistory: [{
-                "dateTime": currentDateString,
-                "bicycleIsSelected": state.bicycleIsSelected,
-                "warrantyIsSelected": state.warrantyIsSelected,
-            }].concat(state.unSavedHistory)
-        }));
+    onSaveButtonClick() {
+
+        var self = this;
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                self.clearUnsavedHistory();
+                self.updateSavedHistory();
+            }
+        }
+
+        xhttp.open("POST", "api/history.php", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.setRequestHeader("Accept", "application/json");
+
+        var reversedUnsavedHistory = this.state.unSavedHistory;
+        reversedUnsavedHistory.reverse();
+        xhttp.send(JSON.stringify(reversedUnsavedHistory));
     }
 
-    clearUnsavedHistory() {
-        this.setState({
-            bicycleIsSelected: false,
-            warrantyIsSelected: false,
-            unSavedHistory: []
-        });
+    onClearUnsavedHistoryButtonClick() {
+        this.clearUnsavedHistory();
     }
-
-    deleteSavedHistory() {
+    
+    onDeleteSavedHistoryButtonClick() {
         var self = this;
 
         var xhttp = new XMLHttpRequest();
@@ -296,36 +304,34 @@ class App extends React.Component {
                 bicycleIsSelected: true
             });
         }
-        this.appendStateToHistory();
+        this.appendStateToUnsavedHistory();
     }
 
     handleWarrantyStateChange() {
         this.setState((state) => ({warrantyIsSelected: !state.warrantyIsSelected}));
-        this.appendStateToHistory();
+        this.appendStateToUnsavedHistory();
     }
 
-    onSaveButtonClick() {
-
-        var self = this;
-
-        var xhttp = new XMLHttpRequest();
-
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                self.clearUnsavedHistory();
-                self.updateSavedHistory();
-            }
-        }
-
-        xhttp.open("POST", "api/history.php", true);
-        xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.setRequestHeader("Accept", "application/json");
-
-        var reversedUnsavedHistory = this.state.unSavedHistory;
-        reversedUnsavedHistory.reverse();
-        xhttp.send(JSON.stringify(reversedUnsavedHistory));
+    appendStateToUnsavedHistory() {
+        const currentDate = new Date();
+        const currentDateString = currentDate.toISOString();
+        this.setState((state) => ({
+            unSavedHistory: [{
+                "dateTime": currentDateString,
+                "bicycleIsSelected": state.bicycleIsSelected,
+                "warrantyIsSelected": state.warrantyIsSelected,
+            }].concat(state.unSavedHistory)
+        }));
     }
-    
+
+    clearUnsavedHistory() {
+        this.setState({
+            bicycleIsSelected: false,
+            warrantyIsSelected: false,
+            unSavedHistory: []
+        });
+    }
+
     updateSavedHistory() {
 
         var self = this;
@@ -373,8 +379,8 @@ class App extends React.Component {
                     unSavedHistory={this.state.unSavedHistory}
                     savedHistory={this.state.savedHistory}
                     onSaveButtonClick={this.onSaveButtonClick}
-                    onClearUnsavedHistory={this.clearUnsavedHistory}
-                    onDeleteAllHistory={this.deleteSavedHistory}
+                    onClearUnsavedHistory={this.onClearUnsavedHistoryButtonClick}
+                    onDeleteAllHistory={this.onDeleteSavedHistoryButtonClick}
                 />
             </div>
         );
