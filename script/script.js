@@ -1,4 +1,11 @@
 
+/**
+ * Converts an ISO date string to a more readable YYYY-MM-DD format.
+ * 
+ * @param {string} ISOString ISO representation of a Date object
+ * 
+ * @return the date in a YYYY-MM-DD hh:mm:ss format.
+ */
 function ISOStringToReadable(ISOString) {
     return ISOString.substring(0,19).replace("T", " ")
 }
