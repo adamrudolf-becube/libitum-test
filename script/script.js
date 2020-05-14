@@ -10,6 +10,11 @@ function ISOStringToReadable(ISOString) {
     return ISOString.substring(0,19).replace("T", " ")
 }
 
+/**
+ * ProductBox represents a selectable product.
+ * 
+ * Product box has a fancy clickable checkbox and a label.
+ */
 class ProductBox extends React.Component {
     constructor(props) {
         super(props);
@@ -30,6 +35,15 @@ class ProductBox extends React.Component {
     }
 }
 
+/**
+ * History table renders a table with a fixed 4 column header, and flexible children.
+ * 
+ * Header fields are "Date and time", "Awesome bicycle", "Extended warranty" and "Gratis 3 months".
+ * The table has a body where HistoryTable renders it's child elements. They are expected to be
+ * table rows with these 4 columns.
+ * 
+ * @param {JSX elements} props table rows preferably with 4 fields.
+ */
 function HistoryTable(props) {
     return (
         <table>
@@ -48,10 +62,71 @@ function HistoryTable(props) {
     );
 }
 
+/**
+ * TableIcon renders an <i> element with the font-awesome check or "X" symbol based
+ * on whether the "checked" property is true or false.
+ * 
+ * @param {bool} checked any varialbe JavaScript can interpret as true or false
+ */
 function TableIcon(props) {
     return props.checked ? <i className="fa fa-check"></i> : <i className="fa fa-remove"></i>;
 }
 
+/**
+ * HistoryContainer contains 3 buttons and the HistoryTable.
+ * 
+ * The component renders 3 buttons: "Save", "Clear unsaved history"
+ * and "Delete whole history". The 3 buttons expect their callback in props.
+ * 
+ * The contents of the HistoryTable must be also given in 2 separate props: 
+ * one for saved and one for the unsaved history. (I.e. the ones from the 
+ * database and from the current run.
+ * 
+ * @param {function} onSaveButtonClick callback for the "Save" button
+ * @param {function} onClearUnsavedHistory callback for the "Clear unsaved history" button
+ * @param {function} onDeleteAllHistory callback for the "Delete whole history" button
+ * @param {JSON} unSavedHistory JSON array to be displayed on the top of the HistoryTable. Example data:
+ *      [
+ *          {
+ *              bicycleIsSelected: true
+ *              dateTime: "2020-05-14T18:07:28.284Z"
+ *              warrantyIsSelected: false
+ *          }
+ *          {
+ *              bicycleIsSelected: true
+ *              dateTime: "2020-05-14T18:07:28.867Z"
+ *              warrantyIsSelected: true
+ *          }
+ *          {
+ *              bicycleIsSelected: false
+ *              dateTime: "2020-05-14T18:07:29.642Z"
+ *              warrantyIsSelected: false
+ *          }
+ *      ]
+ * @param {JSON} savedHistory JSON array to be displayed on the bottom of the HistoryTable. Example data:
+ *     [
+ *         {
+ *             0: "98"
+ *             1: "2020-05-14 18:06:49"
+ *             2: "1"
+ *             3: "0"
+ *             ID: "98"
+ *             bicycleSelected: "1"
+ *             datetime: "2020-05-14 18:06:49"
+ *             warrantySelected: "0"
+ *         }
+ *         {
+ *             0: "99"
+ *             1: "2020-05-14 18:06:50"
+ *             2: "1"
+ *             3: "1"
+ *             ID: "99"
+ *             bicycleSelected: "1"
+ *             datetime: "2020-05-14 18:06:50"
+ *             warrantySelected: "1"
+ *         }
+ *     ]
+ */
 class HistoryContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -110,6 +185,39 @@ class HistoryContainer extends React.Component {
     }
 }
 
+/**
+ * App renders the whole application and maintains the common state.
+ * 
+ * App renders the 3 products: "Awesome bicycle", "Extended warranty" and "Gratis 3 months"
+ * 
+ * App handles logic behind checkbox "checked" and "disabled" properties, stores information
+ * about the saved (in database) history, unsaved history (not yet in database), and handles
+ * callbacks of button clicks maintaining connection to the backend via http requests.
+ * 
+ *  - Checkbox logic
+ *      - If "Awesome bicycle" is selected, "Extended warranty" is selectable
+ *      - If "Awesome bicycle" is not selected, "Extended warranty" is unselected and disabled
+ *      - If "Extended warranty" is selected, "Gratis 3 months" is selected and vica versa.
+ *      - "Gratis 3 months" is always disabled.
+ * 
+ *  - Checkbox states
+ *      - Every checkbox change is appended to unsaved history and immediately displayed on the
+ *        history table.
+ *      - If the application is started and database is empty, all checkboxes start unselected
+ *        and table is empty.
+ *      - If the application is started and database is not empty, checkboxes are set to the last 
+ *        saved state and table shows the saved history.
+ * 
+ *  - User actions
+ *      - User can save the unsaved history to the database. Unsaved history gets empty and what
+ *        was earlier in unsaved history, gets to the saved history (indirectly, through the database).
+ *        Checkboxes are set to the last saved sate (no change in this case).
+ *      - User can delete the unsaved history and return to the last saved state.
+ *      - User can delete all (saved and unsaved) history. In this case the saved and unsaved history
+ *        gets empty, database gets cleared and all checkboxes become unchecked.
+ * 
+ * App doesn't expect any props.
+ */
 class App extends React.Component {
     constructor(props) {
         super(props);
