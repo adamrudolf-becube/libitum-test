@@ -96,7 +96,7 @@ These features are the following:
 
 ### Disclaimer on performance
 
-This application is not optimized for performance. This is for two reasons: first of all, this is not a production environment and is exremely small anyway, I don't expect any performance issues. Secondly, since this is for demonstration purposes I preferred clean, structured design to performance. Collecting all CSS to one file, minifying CSS and JS, and render React server side would be some of the examples I would have done differently in a bigger and real project.
+This application is not optimized for performance. This is for two reasons: first of all, this is not a production environment and is exremely small anyway, I don't expect any performance issues. Secondly, since this is for demonstration purposes I preferred clean, structured design over performance. Collecting all CSS to one file, minifying CSS and JS, and render React server side would be some of the examples I would have done differently in a bigger and real project.
 
 ## Design
 
