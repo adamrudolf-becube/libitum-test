@@ -2,6 +2,10 @@
 /**
  * Converts an ISO date string to a more readable YYYY-MM-DD format.
  * 
+ * Example:
+ * 
+ *      "2020-05-14T18:07:28.284Z" -> "2020-05-14 18:07:28"
+ * 
  * @param {string} ISOString ISO representation of a Date object
  * 
  * @return the date in a YYYY-MM-DD hh:mm:ss format.

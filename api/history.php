@@ -55,10 +55,49 @@ class ApiEndpoint {
      * it will response by a 405 Method Not Allowed response.
      * 
      * For GET it will return the contents of the selectionhistory table of the
-     * given database.
+     * given database. Example response:
+     *     [
+     *         {
+     *             0: "98"
+     *             1: "2020-05-14 18:06:49"
+     *             2: "1"
+     *             3: "0"
+     *             ID: "98"
+     *             bicycleSelected: "1"
+     *             datetime: "2020-05-14 18:06:49"
+     *             warrantySelected: "0"
+     *         }
+     *         {
+     *             0: "99"
+     *             1: "2020-05-14 18:06:50"
+     *             2: "1"
+     *             3: "1"
+     *             ID: "99"
+     *             bicycleSelected: "1"
+     *             datetime: "2020-05-14 18:06:50"
+     *             warrantySelected: "1"
+     *         }
+     *     ]
      * 
      * For POST it will write the given data to the database and reply TRUE or FALSE
-     * based on the success of the operation.
+     * based on the success of the operation. Example expected input:
+     *       [
+     *          {
+     *              bicycleIsSelected: true
+     *              dateTime: "2020-05-14T18:07:28.284Z"
+     *              warrantyIsSelected: false
+     *          }
+     *          {
+     *              bicycleIsSelected: true
+     *              dateTime: "2020-05-14T18:07:28.867Z"
+     *              warrantyIsSelected: true
+     *          }
+     *          {
+     *              bicycleIsSelected: false
+     *              dateTime: "2020-05-14T18:07:29.642Z"
+     *              warrantyIsSelected: false
+     *          }
+     *      ]
      * 
      * For DELETE it will delete all data from the database and reply TRUE or FALSE
      * based on the success of the operation.
