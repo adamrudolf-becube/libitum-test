@@ -170,7 +170,10 @@ class App extends React.Component {
         xhttp.open("POST", "api/history.php", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.setRequestHeader("Accept", "application/json");
-        xhttp.send(JSON.stringify(this.state.unSavedHistory));
+
+        var reversedUnsavedHistory = this.state.unSavedHistory;
+        reversedUnsavedHistory.reverse();
+        xhttp.send(JSON.stringify(reversedUnsavedHistory));
     }
     
     updateSavedHistory() {
