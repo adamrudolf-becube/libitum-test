@@ -130,11 +130,11 @@ class ApiEndpoint {
 
     private function delete_history() {
 
-        $sql = "DELETE * FROM $this->tablename";
+        $sql = "DELETE FROM $this->tablename";
         $result = $this->database_connection->query($sql);
 
         if ($result === FALSE) {
-            error_log("Error: " . $this->database_connection->error);
+            error_log("Error: " . $this->database_connection->get_error());
             echo json_encode(false);
         } else {
             echo json_encode(true);

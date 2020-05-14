@@ -70,7 +70,7 @@ class HistoryContainer extends React.Component {
     }
 
     onDeleteFullHistoryButtonClick(e) {
-        
+        this.props.onDeleteAllHistory();
     }
 
     render() {
@@ -99,7 +99,7 @@ class HistoryContainer extends React.Component {
                 <div id="button-container">
                     <button className="btn success" onClick={this.onSaveButtonClick}>Save</button>
                     <button className="btn warning" onClick={this.onClearUnsavedHistoryButtonClick}>Clear unsaved history</button>
-                    <button className="btn danger">Delete whole history</button>
+                    <button className="btn danger" onClick={this.onDeleteFullHistoryButtonClick}>Delete whole history</button>
                 </div>
                 <HistoryTable>
                     {unsavedTableRows}
@@ -123,6 +123,7 @@ class App extends React.Component {
         this.handleBicycleStateChange = this.handleBicycleStateChange.bind(this);
         this.handleWarrantyStateChange = this.handleWarrantyStateChange.bind(this);
         this.clearUnsavedHistory = this.clearUnsavedHistory.bind(this);
+        this.deleteSavedHistory = this.deleteSavedHistory.bind(this);
         this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     }
 
@@ -144,6 +145,25 @@ class App extends React.Component {
             warrantyIsSelected: false,
             unSavedHistory: []
         });
+    }
+
+    deleteSavedHistory() {
+        var self = this;
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                self.clearUnsavedHistory();
+                self.updateSavedHistory();
+            }
+        }
+
+        xhttp.open("DELETE", "api/history.php", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.setRequestHeader("Accept", "application/json");
+
+        xhttp.send();
     }
 
     handleBicycleStateChange() {
@@ -234,7 +254,8 @@ class App extends React.Component {
                     unSavedHistory={this.state.unSavedHistory}
                     savedHistory={this.state.savedHistory}
                     onSaveButtonClick={this.onSaveButtonClick}
-                    onClearUnsavedHistory={this.clearUnsavedHistory} 
+                    onClearUnsavedHistory={this.clearUnsavedHistory}
+                    onDeleteAllHistory={this.deleteSavedHistory}
                 />
             </div>
         );
